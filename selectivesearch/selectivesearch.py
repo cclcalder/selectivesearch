@@ -9,11 +9,9 @@ import skimage.util
 import skimage.segmentation
 import numpy
 
-
 # "Selective Search for Object Recognition" by J.R.R. Uijlings et al.
 #
 #  - Modified version with LBP extractor for texture vectorization
-
 
 def _generate_segments(im_orig, scale, sigma, min_size):
     """
@@ -233,7 +231,7 @@ def _merge_regions(r1, r2):
 
 
 def selective_search(
-        im_orig, scale=1.0, sigma=0.8, min_size=50):
+        im_orig, scale=500, sigma=0.9, min_size=1):
     '''Selective Search
 
     Parameters
@@ -261,7 +259,8 @@ def selective_search(
                 ...
             ]
     '''
-    assert im_orig.shape[2] == 3, "3ch image is expected"
+
+    assert im_orig.shape[2] == 3, "3ch image is expected!"
 
     # load image and get smallest regions
     # region label is stored in the 4th value of each pixel [r,g,b,(region)]
@@ -306,7 +305,7 @@ def selective_search(
             n = k[1] if k[0] in (i, j) else k[0]
             S[(t, n)] = _calc_sim(R[t], R[n], imsize)
 
-    regions = []
+    regions = [:20]
     for k, r in list(R.items()):
         regions.append({
             'rect': (
